@@ -6,8 +6,12 @@ class NotesController < ApplicationController
   end
 
   def create
-    @note = Note.create(note_params)
-    redirect_to root_path
+    @note = Note.new(note_params)
+    if @note.save
+      render json: @note
+    else
+      render status: 422
+    end
   end
 
   private
