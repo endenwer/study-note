@@ -1,3 +1,4 @@
+B = ReactBootstrap
 @NoteForm = React.createClass
   onCreate: React.PropTypes.func.isRequire
 
@@ -11,7 +12,7 @@
     $(document).bind('click', this.handleOutsideClick)
 
   componentDidUpdate: ->
-    @refs.text.focus() if @state.visibility
+    @refs.noteInput.getInputDOMNode().focus() if @state.visibility
 
 
   # Visibility to false when click outside the form
@@ -24,11 +25,11 @@
 
   handleSubmit: (e) ->
     e.preventDefault()
-    text = @refs.text.value
+    text = @refs.noteInput.getValue()
     return unless text
 
     @props.onCreate(text: text)
-    @refs.text.value = ""
+    @refs.noteInput.getInputDOMNode().value = ""
     @state.visibility = false
     @setState(@state)
 
@@ -45,8 +46,8 @@
       buttonClass = "show"
     <div>
       <form className={formClass} onSubmit={@handleSubmit} ref='form'>
-        <input type='text' ref='text'/>
-        <input type='submit' value='Добавить' />
+        <B.Input type='text' ref='noteInput' placeholder='Введите что-нибудь...' />
+        <B.ButtonInput type='submit' bsStyle='success' value='Добавить' />
       </form>
-      <button className={buttonClass} onClick={@handleButtonClick}>Добавить</button>
+      <B.Button className={buttonClass} onClick={@handleButtonClick}>Добавить</B.Button>
     </div>
