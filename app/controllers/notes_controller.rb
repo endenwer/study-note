@@ -1,8 +1,20 @@
 class NotesController < ApplicationController
 
   def index
-    @notes = Note.all
-    @note = Note.new
+    if params[:category_id]
+      notes = Note.where(category_id: params[:category_id])
+    else
+      notes = Note.all
+    end
+    categories = Category.all
+    @presenter = {
+      notes: notes,
+      categories: categories
+    }
+    respond_to do |format|
+      format.html
+      format.json { render json: { notes: notes } }
+    end
   end
 
   def create
@@ -10,13 +22,13 @@ class NotesController < ApplicationController
     if @note.save
       render json: @note
     else
-      render status: 422
+      render :nothing, status: 422
     end
   end
 
   private
 
   def note_params
-    params.require(:note).permit(:text)
+    params.require(:note).permit(:text, :category_id)
   end
 end

@@ -17,7 +17,6 @@ gem 'react-bootstrap-rails'
 gem 'sprockets-coffee-react'
 gem 'rails_admin', '~> 0.6.8'
 
-
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
