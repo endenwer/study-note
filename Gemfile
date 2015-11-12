@@ -16,6 +16,8 @@ gem 'react-rails', '~> 1.4.2'
 gem 'react-bootstrap-rails'
 gem 'sprockets-coffee-react'
 gem 'rails_admin', '~> 0.6.8'
+gem 'mysql2'
+gem 'thinking-sphinx'
 
 group :development, :test do
   gem 'byebug'

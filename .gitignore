@@ -12,3 +12,6 @@
 !/log/.keep
 /tmp
 public/assets/
+
+dump.rdb
+db/sphinx

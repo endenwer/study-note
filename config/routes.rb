@@ -2,10 +2,10 @@ Rails.application.routes.draw do
   root 'notes#index'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
-  resources :notes, only: [:create, :update]
+  resources :notes, only: [:index, :create, :update]
   resources :categories, only: [:create, :update]
 
-  get '/c/:id' => 'categories#show'
+  get '/c/:category_id' => 'categories#show'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -1,19 +1,17 @@
 class NotesController < ApplicationController
+  before_action :notes, only: [:index]
 
   def index
-    if params[:category_id]
-      notes = Note.where(category_id: params[:category_id])
-    else
-      notes = Note.all
-    end
     categories = Category.all
     @presenter = {
       notes: notes,
       categories: categories
     }
+    @presenter[:q] = params[:q] if params[:q]
+
     respond_to do |format|
       format.html
-      format.json { render json: { notes: notes } }
+      format.json { render json: notes }
     end
   end
 

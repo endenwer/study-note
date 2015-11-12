@@ -26,10 +26,10 @@ B = ReactBootstrap
   handleSubmit: (e) ->
     e.preventDefault()
     text = @refs.noteInput.getValue()
-    categoryId = @props.category.id if @props.category
+    category = @props.category
     return unless text
 
-    @props.onCreate(text: text, category_id: categoryId)
+    @props.onCreate(text: text, category_id: category)
     @refs.noteInput.getInputDOMNode().value = ""
     @state.visibility = false
     @setState(@state)
@@ -45,12 +45,10 @@ B = ReactBootstrap
     else
       formClass = "hidden"
       buttonClass = "show"
-    categoryName = @props.category.name if @props.category
     <div>
       <form className={formClass} onSubmit={@handleSubmit} ref='form'>
         <B.Input type='text' ref='noteInput' placeholder='Введите что-нибудь...' />
         <B.ButtonInput type='submit' bsStyle='success' value='Добавить' />
-        <p>Запись будет добавлена в категорию {categoryName || "Разное"}</p>
       </form>
       <B.Button className={buttonClass} onClick={@handleButtonClick}>Добавить</B.Button>
     </div>

@@ -1,10 +1,10 @@
 class CategoriesController < ApplicationController
+  before_action :notes, only: [:show]
 
   def show
-    category = Category.find(params[:id])
-    notes = category.notes
+    category = Category.find(params[:category_id])
     @presenter = {
-      currentCategory: category,
+      currentCategoryId: category.id,
       categories: Category.all,
       notes: notes
     }

@@ -1,9 +1,35 @@
 B = ReactBootstrap
 @NoteBox = React.createClass
   notes: React.PropTypes.array.isRequire
+  categories: React.PropTypes.array.isRequired
+  currentCategoryId: React.PropTypes.number
+  q: React.PropTypes.string
+
+  getDefaultProps: ->
+    currentCategoryId: null
+    q: null
 
   getInitialState: ->
+    currentCategoryId: @props.currentCategoryId
     notes: @props.notes
+    q: @props.q
+
+  componentWillUpdate: (nextProps, nextState) ->
+    url = "/"
+    if nextState.currentCategoryId
+      url += "c/#{nextState.currentCategoryId}/"
+    if nextState.q
+      url += "?q=#{nextState.q}"
+    window.history.pushState('', '', url)
+
+  getNotes: ->
+    query =
+      category_id: @state.currentCategoryId
+      q: @state.q
+    $.get('/notes.json', query)
+      .done (notes) =>
+        @state.notes = notes
+        @setState(@state)
 
   onCreate: (note) ->
     $.post('/notes', note: note)
@@ -11,16 +37,19 @@ B = ReactBootstrap
         @state.notes.unshift(note)
         @setState(@state)
 
-  onSelectCategory: (categoryId) ->
-    if categoryId == ""
-      window.location.href = "/"
-    else
-      window.location.href = "/c/#{categoryId}"
+  onSelectCategory: (categoryId = null) ->
+    @state.currentCategoryId = categoryId
+    @getNotes()
+
+
+  onSearch: (q = null) ->
+    @state.q = q
+    @getNotes()
 
   render: ->
-    categoryId = @props.currentCategory.id if @props.currentCategory
     <div>
-      <CategorySelector categories={@props.categories} current={categoryId} onSelect={@onSelectCategory}/>
-      <NoteForm onCreate={@onCreate} category={@props.currentCategory}/>
+      <SearchField query={@state.q} onSearch={@onSearch}/>
+      <CategorySelector categories={@props.categories} current={@state.currentCategoryId} onSelect={@onSelectCategory}/>
+      <NoteForm onCreate={@onCreate} category={@props.currentCategoryId}/>
       <NoteList notes={@state.notes} />
     </div>
