@@ -50,6 +50,6 @@ B = ReactBootstrap
     <div>
       <SearchField query={@state.q} onSearch={@onSearch}/>
       <CategorySelector categories={@props.categories} current={@state.currentCategoryId} onSelect={@onSelectCategory}/>
-      <NoteForm onCreate={@onCreate} category={@props.currentCategoryId}/>
+      <NoteForm onCreate={@onCreate} category={@props.currentCategoryId} csrf_param={@props.csrf_param} csrf_token={@props.csrf_token}/>
       <NoteList notes={@state.notes} />
     </div>

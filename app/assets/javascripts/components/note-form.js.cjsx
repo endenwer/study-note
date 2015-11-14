@@ -5,15 +5,26 @@ B = ReactBootstrap
   getInitialState: ->
     visibility: false
 
+  initDropzone: ->
+    Dropzone.autoDiscover = false
+    @dropzone = new Dropzone(ReactDOM.findDOMNode(@refs.dropzone), {
+      clickable: true
+      addRemoveLinks: true
+      dictDefaultMessage: "Для загрузки файлов<br>Перетащите их сюда или кликните"
+    })
+    @attachment_ids = []
+    @dropzone.on "success", (file, response) =>
+      @attachment_ids.push response.id
+
   componentDidMount: ->
     $(document).bind('click', this.handleOutsideClick)
+    @initDropzone()
 
   componentWillUnmount: ->
     $(document).bind('click', this.handleOutsideClick)
 
   componentDidUpdate: ->
     @refs.noteInput.getInputDOMNode().focus() if @state.visibility
-
 
   # Visibility to false when click outside the form
   handleOutsideClick: (e) ->
@@ -23,18 +34,27 @@ B = ReactBootstrap
         @state.visibility = false
         @setState(@state)
 
-  handleSubmit: (e) ->
-    e.preventDefault()
+  handleSubmit: ->
     text = @refs.noteInput.getValue()
     category = @props.category
     return unless text
 
-    @props.onCreate(text: text, category_id: category)
+    note =
+      text: text
+      category_id: category
+      attachment_ids: @attachment_ids
+    @props.onCreate(note)
     @refs.noteInput.getInputDOMNode().value = ""
     @state.visibility = false
     @setState(@state)
 
   handleButtonClick: ->
+    @state.visibility = true
+    @setState(@state)
+
+  # I have no idea why, but when click on dropzone
+  # it triggered the outside click event
+  handleDropzoneClick: ->
     @state.visibility = true
     @setState(@state)
 
@@ -46,9 +66,12 @@ B = ReactBootstrap
       formClass = "hidden"
       buttonClass = "show"
     <div>
-      <form className={formClass} onSubmit={@handleSubmit} ref='form'>
+      <div className={formClass} ref='form'>
         <B.Input type='text' ref='noteInput' placeholder='Введите что-нибудь...' />
-        <B.ButtonInput type='submit' bsStyle='success' value='Добавить' />
-      </form>
+        <form action="/attachments" onClick={@handleDropzoneClick} ref='dropzone' className="dropzone dropzone-container">
+          <input type="hidden" name={ @props.csrf_param } value={ @props.csrf_token } />
+        </form>
+        <B.Button onClick={@handleSubmit} bsStyle='success'>Добавить</B.Button>
+      </div>
       <B.Button className={buttonClass} onClick={@handleButtonClick}>Добавить</B.Button>
     </div>

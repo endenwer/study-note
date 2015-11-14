@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :categories, only: [:create, :update]
 
   get '/c/:category_id' => 'categories#show'
+  post '/attachments' => 'attachments#create'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

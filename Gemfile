@@ -18,6 +18,10 @@ gem 'sprockets-coffee-react'
 gem 'rails_admin', '~> 0.6.8'
 gem 'mysql2'
 gem 'thinking-sphinx'
+gem 'carrierwave'
+source 'https://rails-assets.org' do
+  gem 'rails-assets-dropzone'
+end
 
 group :development, :test do
   gem 'byebug'
