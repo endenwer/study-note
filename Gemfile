@@ -19,6 +19,7 @@ gem 'rails_admin', '~> 0.6.8'
 gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'carrierwave'
+gem 'active_model_serializers', '~> 0.10.0.rc3'
 source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'
 end
