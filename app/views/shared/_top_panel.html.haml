@@ -1,0 +1,7 @@
+%div.top-panel
+  %div.user-info
+    %img{ src: current_user.image, class: "img-circle" }
+    %span{ class: "user-name"}
+      = current_user.name
+  %div.sign-out
+    = link_to "Выход", destroy_user_session_path, method: :delete, class: "btn btn-default"

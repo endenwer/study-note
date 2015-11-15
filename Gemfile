@@ -20,6 +20,8 @@ gem 'mysql2'
 gem 'thinking-sphinx'
 gem 'carrierwave'
 gem 'active_model_serializers', '~> 0.10.0.rc3'
+gem 'devise'
+gem 'omniauth-vkontakte'
 source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'
 end
