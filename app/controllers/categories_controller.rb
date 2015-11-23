@@ -8,7 +8,8 @@ class CategoriesController < ApplicationController
       csrf_token: form_authenticity_token,
       currentCategoryId: category.id,
       categories: Category.all,
-      notes: notes
+      totalPages: (notes.total_count / NOTE_PER_PAGE.to_f).ceil,
+      notes: ActiveModel::SerializableResource.new(notes).serializable_hash
     }
   end
 end

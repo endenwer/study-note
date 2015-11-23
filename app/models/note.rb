@@ -1,4 +1,6 @@
 class Note < ActiveRecord::Base
+  paginates_per NOTE_PER_PAGE
+
   belongs_to :category
   has_many :attachments
 

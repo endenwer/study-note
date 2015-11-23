@@ -3,9 +3,11 @@ class NotesController < ApplicationController
 
   def index
     categories = Category.all
+    total_pages = (notes.total_count / NOTE_PER_PAGE.to_f).ceil
     @presenter = {
-      notes: notes,
+      notes: ActiveModel::SerializableResource.new(notes).serializable_hash,
       categories: categories,
+      totalPages: total_pages,
       csrf_param: request_forgery_protection_token,
       csrf_token: form_authenticity_token
     }
@@ -13,7 +15,8 @@ class NotesController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: notes }
+      format.json { render json: { notes: ActiveModel::SerializableResource.new(notes).serializable_hash,
+                                   totalPages: total_pages } }
     end
   end
 

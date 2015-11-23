@@ -7,16 +7,23 @@ class ApplicationController < ActionController::Base
   def notes
     if params[:q].blank?
       if params[:category_id].blank?
-        @notes ||= ActiveModel::SerializableResource.new(Note.all).serializable_hash
+        @notes ||= Note.page(params[:page])
       else
-        @notes ||= ActiveModel::SerializableResource.new(Note.where(category_id: params[:category_id])).serializable_hash
+        @notes ||= Note.where(category_id: params[:category_id]).page(params[:page])
       end
     else
       if params[:category_id].blank?
-        @notes ||= ActiveModel::SerializableResource.new(Note.search params[:q]).serializable_hash
+        @notes ||= Note.search params[:q],
+                               page: params[:page],
+                               per_page: NOTE_PER_PAGE
       else
-        @notes ||= ActiveModel::SerializableResource.new(Note.search params[:q], with: { category_id: params[:category_id] }).serializable_hash
+        @notes ||= Note.search params[:q],
+                               with: { category_id: params[:category_id] },
+                               page: params[:page],
+                               per_page: NOTE_PER_PAGE
       end
     end
+    @notes
   end
+
 end

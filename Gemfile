@@ -22,6 +22,7 @@ gem 'carrierwave'
 gem 'active_model_serializers', '~> 0.10.0.rc3'
 gem 'devise'
 gem 'omniauth-vkontakte'
+gem 'kaminari'
 source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'
 end

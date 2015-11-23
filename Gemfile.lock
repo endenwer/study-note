@@ -277,6 +277,7 @@ DEPENDENCIES
   haml-rails (~> 0.9)
   jbuilder (~> 2.0)
   jquery-rails
+  kaminari
   mysql2
   omniauth-vkontakte
   pg

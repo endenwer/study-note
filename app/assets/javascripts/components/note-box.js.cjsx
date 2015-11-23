@@ -2,8 +2,17 @@ B = ReactBootstrap
 @NoteBox = React.createClass
   notes: React.PropTypes.array.isRequire
   categories: React.PropTypes.array.isRequired
+  totalPages: React.PropTypes.number.isRequired
   currentCategoryId: React.PropTypes.number
   q: React.PropTypes.string
+
+  componentDidMount: ->
+    if @state.totalPages > @state.page
+      $(document).on('scroll', @onScroll)
+
+  componentDidUpdate: ->
+    if @state.totalPages > @state.page
+      $(document).on('scroll', @onScroll)
 
   getDefaultProps: ->
     currentCategoryId: null
@@ -11,8 +20,10 @@ B = ReactBootstrap
 
   getInitialState: ->
     currentCategoryId: @props.currentCategoryId
+    totalPages: @props.totalPages
     notes: @props.notes
     q: @props.q
+    page: 1
 
   componentWillUpdate: (nextProps, nextState) ->
     url = "/"
@@ -26,25 +37,43 @@ B = ReactBootstrap
     query =
       category_id: @state.currentCategoryId
       q: @state.q
+      page: @state.page
     $.get('/notes.json', query)
-      .done (notes) =>
-        @state.notes = notes
+      .done (data) =>
+        if query.page == 1
+          console.log(1)
+          @state.notes = data.notes
+        else
+          console.log(2)
+          data.notes.forEach (note)=>
+            @state.notes.push(note)
+        @state.totalPages = data.totalPages
         @setState(@state)
 
   onCreate: (note) ->
     $.post('/notes', note: note)
       .done (note) =>
         @state.notes.unshift(note)
+        @state.offset += 1
         @setState(@state)
 
   onSelectCategory: (categoryId = null) ->
     @state.currentCategoryId = categoryId
+    @state.page = 1
     @getNotes()
 
 
   onSearch: (q = null) ->
     @state.q = q
+    @state.page = 1
     @getNotes()
+
+  onScroll: (event) ->
+    if ($(document).height() - window.pageYOffset - window.innerHeight < 250)
+      @state.page += 1
+      @getNotes()
+      $(document).off('scroll', @onScroll)
+
 
   render: ->
     <div className='container'>
