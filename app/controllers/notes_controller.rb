@@ -25,7 +25,7 @@ class NotesController < ApplicationController
     if note_params[:attachment_ids].present?
       @note = Note.create_with_attachments(current_user, note_params)
     else
-      @note = Note.create(note_params)
+      @note = current_user.group.notes.create(note_params)
     end
     if @note.persisted?
       render json: @note

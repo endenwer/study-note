@@ -3,7 +3,7 @@ B = ReactBootstrap
   onCreate: React.PropTypes.func.isRequire
 
   getInitialState: ->
-    visibility: false
+    showModal: false
 
   initDropzone: ->
     Dropzone.autoDiscover = false
@@ -17,22 +17,10 @@ B = ReactBootstrap
       @attachment_ids.push response.id
 
   componentDidMount: ->
-    $(document).bind('click', this.handleOutsideClick)
     @initDropzone()
 
-  componentWillUnmount: ->
-    $(document).bind('click', this.handleOutsideClick)
-
   componentDidUpdate: ->
-    @refs.noteInput.getInputDOMNode().focus() if @state.visibility
-
-  # Visibility to false when click outside the form
-  handleOutsideClick: (e) ->
-    if @refs.form
-      form = ReactDOM.findDOMNode(@refs.form)
-      unless (e.target == form  || $(form).has(e.target).length)
-        @state.visibility = false
-        @setState(@state)
+    @refs.noteInput.getInputDOMNode().focus() if @state.showModal
 
   handleSubmit: ->
     text = @refs.noteInput.getValue()
@@ -45,33 +33,43 @@ B = ReactBootstrap
       attachment_ids: @attachment_ids
     @props.onCreate(note)
     @refs.noteInput.getInputDOMNode().value = ""
-    @state.visibility = false
+    @state.showModal = false
     @setState(@state)
 
-  handleButtonClick: ->
-    @state.visibility = true
+  openModal: ->
+    @state.showModal = true
     @setState(@state)
 
-  # I have no idea why, but when click on dropzone
-  # it triggered the outside click event
-  handleDropzoneClick: ->
-    @state.visibility = true
+  closeModal: ->
+    @state.showModal = false
     @setState(@state)
 
   render: ->
-    if @state.visibility
-      formClass = "show"
-      buttonClass = "hidden"
+    if @state.showModal
+      modalClass = "show"
+      backdrop = <div className="modal-backdrop fade in"></div>
     else
-      formClass = "hidden"
-      buttonClass = "show"
+      modalClass = "hidden"
+      backdtop = ""
     <div>
-      <div className={formClass} ref='form'>
-        <B.Input type='text' ref='noteInput' placeholder='Введите что-нибудь...' />
-        <form action="/attachments" onClick={@handleDropzoneClick} ref='dropzone' className="dropzone dropzone-container">
-          <input type="hidden" name={ @props.csrf_param } value={ @props.csrf_token } />
-        </form>
-        <B.Button onClick={@handleSubmit} bsStyle='success'>Добавить</B.Button>
+      { backdrop }
+      <div className="fade in modal #{modalClass}" tabIndex="-1" role="dialog" style={ { display:"block" } }>
+        <div className="modal-dialog">
+          <div className="modal-content" role="document">
+            <div aria-label="Close" className="modal-header">
+              <button type="button" onClick={@closeModal} className="close"><span aria-hidden="true">×</span></button>
+              <h4 className="modal-title">Добавить запись</h4></div>
+            <div className="modal-body">
+              <div ref='form'>
+                <B.Input type='text' ref='noteInput' placeholder='Введите что-нибудь...' />
+                <form action="/attachments" ref='dropzone' className="dropzone dropzone-container">
+                  <input type="hidden" name={ @props.csrf_param } value={ @props.csrf_token } />
+                </form>
+                <B.Button onClick={@handleSubmit} bsStyle='success'>Добавить</B.Button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <B.Button className={buttonClass} onClick={@handleButtonClick}>Добавить</B.Button>
+      <B.Button onClick={@openModal}>Добавить</B.Button>
     </div>
