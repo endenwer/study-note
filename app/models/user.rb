@@ -14,4 +14,8 @@ class User < ActiveRecord::Base
       user.image = auth.info.image
     end
   end
+
+  def admin?
+    admin
+  end
 end
