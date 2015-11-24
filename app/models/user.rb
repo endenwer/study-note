@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable,
          :rememberable, :trackable, :validatable, :omniauthable, :omniauth_providers => [:vkontakte]
 
+  belongs_to :group
+
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = "#{auth.uid}@vk.com"

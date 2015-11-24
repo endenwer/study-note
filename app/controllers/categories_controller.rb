@@ -1,5 +1,6 @@
 class CategoriesController < ApplicationController
   before_action :notes, only: [:show]
+  before_action :require_group
 
   def show
     category = Category.find(params[:category_id])

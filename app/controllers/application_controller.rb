@@ -7,18 +7,22 @@ class ApplicationController < ActionController::Base
   def notes
     if params[:q].blank?
       if params[:category_id].blank?
-        @notes ||= Note.page(params[:page])
+        @notes ||= Note.where(group_id: current_user.group_id).page(params[:page])
       else
-        @notes ||= Note.where(category_id: params[:category_id]).page(params[:page])
+        @notes ||= Note.where(group_id: current_user.group_id,
+                              category_id: params[:category_id]).page(params[:page])
       end
     else
       if params[:category_id].blank?
         @notes ||= Note.search params[:q],
+                               with: { group_id: current_user.group_id },
                                page: params[:page],
                                per_page: NOTE_PER_PAGE
       else
         @notes ||= Note.search params[:q],
-                               with: { category_id: params[:category_id] },
+                               with: {
+                                 category_id: params[:category_id],
+                                 group_id: current_user.group_id },
                                page: params[:page],
                                per_page: NOTE_PER_PAGE
       end
@@ -26,4 +30,9 @@ class ApplicationController < ActionController::Base
     @notes
   end
 
+  def require_group
+    if current_user.group_id == nil
+      render "errors/without_group"
+    end
+  end
 end

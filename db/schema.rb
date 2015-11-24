@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151115075712) do
+ActiveRecord::Schema.define(version: 20151124083336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,14 +31,22 @@ ActiveRecord::Schema.define(version: 20151115075712) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "groups", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "notes", force: :cascade do |t|
     t.text     "text"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "category_id"
+    t.integer  "group_id"
   end
 
   add_index "notes", ["category_id"], name: "index_notes_on_category_id", using: :btree
+  add_index "notes", ["group_id"], name: "index_notes_on_group_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -57,13 +65,17 @@ ActiveRecord::Schema.define(version: 20151115075712) do
     t.string   "uid"
     t.string   "name"
     t.string   "image"
+    t.integer  "group_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["group_id"], name: "index_users_on_group_id", using: :btree
   add_index "users", ["provider"], name: "index_users_on_provider", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
   add_foreign_key "attachments", "notes"
   add_foreign_key "notes", "categories"
+  add_foreign_key "notes", "groups"
+  add_foreign_key "users", "groups"
 end

@@ -1,5 +1,6 @@
 class NotesController < ApplicationController
   before_action :notes, only: [:index]
+  before_action :require_group
 
   def index
     categories = Category.all
@@ -22,7 +23,7 @@ class NotesController < ApplicationController
 
   def create
     if note_params[:attachment_ids].present?
-      @note = Note.create_with_attachments(note_params)
+      @note = Note.create_with_attachments(current_user, note_params)
     else
       @note = Note.create(note_params)
     end
