@@ -12,7 +12,7 @@ B = ReactBootstrap
   render: ->
     options = @props.categories.map (category) ->
       <option key={category.id} value={category.id}>{category.name}</option>
-    <B.Input defaultValue={@props.current} type="select" onChange={@handleChange}>
+    <select className="category-selector" defaultValue={@props.current} onChange={@handleChange}>
       <option value="">Все записи</option>
       {options}
-    </B.Input>
+    </select>

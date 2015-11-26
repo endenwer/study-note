@@ -5,10 +5,10 @@ B = ReactBootstrap
       <a href={attachment.url}>{attachment.name}</a>
       <br/>
     </span>
-  <B.Well>
+  <div className='note'>
     <p>{props.text}</p>
     {attachments}
-  </B.Well>
+  </div>
 
 @Note.PropTypes = { text: React.PropTypes.string.isRequire }
 @Note.PropTypes = { attachments: React.PropTypes.array }

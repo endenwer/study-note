@@ -3,5 +3,5 @@ ThinkingSphinx::Index.define :note, :with => :active_record do
   indexes text
 
   # attributes
-  has created_at, updated_at, category_id
+  has created_at, updated_at, category_id, group_id
 end

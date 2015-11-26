@@ -1,5 +1,5 @@
 B = ReactBootstrap
-@NoteBox = React.createClass
+@App = React.createClass
   notes: React.PropTypes.array.isRequire
   categories: React.PropTypes.array.isRequired
   totalPages: React.PropTypes.number.isRequired
@@ -77,8 +77,14 @@ B = ReactBootstrap
 
   render: ->
     <div className='container'>
-      <SearchField query={@state.q} onSearch={@onSearch}/>
-      <CategorySelector categories={@props.categories} current={@state.currentCategoryId} onSelect={@onSelectCategory}/>
-      <NoteForm onCreate={@onCreate} category={@props.currentCategoryId} csrf_param={@props.csrf_param} csrf_token={@props.csrf_token}/>
+      <TopPanel
+        onCreate={ @onCreate }
+        onSearch={ @onSearch }
+        onSelectCategory={ @onSelectCategory }
+        query={ @state.q }
+        categories={ @props.categories }
+        currentCategoryId={ @state.currentCategoryId }
+        csrf_param={ @props.csrf_param }
+        csrf_token={ @props.csrf_token } />
       <NoteList notes={@state.notes} />
     </div>

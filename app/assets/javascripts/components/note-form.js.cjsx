@@ -71,5 +71,5 @@ B = ReactBootstrap
           </div>
         </div>
       </div>
-      <B.Button onClick={@openModal}>Добавить</B.Button>
+      <B.Button onClick={@openModal} className='add-btn'>Добавить</B.Button>
     </div>
