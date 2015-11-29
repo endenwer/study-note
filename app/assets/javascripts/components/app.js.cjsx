@@ -74,6 +74,25 @@ B = ReactBootstrap
       @getNotes()
       $(document).off('scroll', @onScroll)
 
+  onNoteEdit: (id, text, attachments, deletedAttachmentIds) ->
+    url = "/notes/#{ id }"
+    params = {}
+    params.text = text
+    params.attachment_ids = attachments.map?((attachment) -> attachment.id) || []
+    @state.notes = @state.notes.map (note) ->
+      if note.id == id
+        note.text = text
+        note.attachments = attachments || []
+      note
+    $.ajax(url, type: 'PUT', data: { note: params })
+    if deletedAttachmentIds.length > 0
+      $.ajax('/attachments/multiple_destroy',
+             type: 'DELETE',
+             data: { ids: deletedAttachmentIds })
+    @setState(@state)
+
+  onAttachmentDelete: (id) ->
+    $.ajax("/attachments/#{id}", type: 'DELETE')
 
   render: ->
     <div className='container'>
@@ -85,6 +104,12 @@ B = ReactBootstrap
         categories={ @props.categories }
         currentCategoryId={ @state.currentCategoryId }
         csrf_param={ @props.csrf_param }
-        csrf_token={ @props.csrf_token } />
-      <NoteList notes={@state.notes} />
+        csrf_token={ @props.csrf_token }
+      />
+      <NoteList
+        notes={@state.notes}
+        onNoteEdit={@onNoteEdit}
+        csrf_param={@props.csrf_param}
+        csrf_token={@props.csrf_token}
+      />
     </div>

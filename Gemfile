@@ -25,6 +25,7 @@ gem 'omniauth-vkontakte'
 gem 'kaminari'
 source 'https://rails-assets.org' do
   gem 'rails-assets-dropzone'
+  gem 'rails-assets-lodash'
 end
 
 group :development, :test do

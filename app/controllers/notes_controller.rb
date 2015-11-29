@@ -34,6 +34,15 @@ class NotesController < ApplicationController
     end
   end
 
+  def update
+    @note = Note.find(params[:id])
+    if @note.update_attributes(note_params)
+      render json: @note
+    else
+      render nothing: true, status: 422
+    end
+  end
+
   private
 
   def note_params

@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require lodash
 //= require dropzone
 //= require react
 //= require react_ujs

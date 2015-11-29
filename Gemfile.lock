@@ -171,6 +171,7 @@ GEM
       railties (= 4.2.1)
       sprockets-rails
     rails-assets-dropzone (4.2.0)
+    rails-assets-lodash (3.10.1)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.6)
@@ -283,6 +284,7 @@ DEPENDENCIES
   pg
   rails (= 4.2.1)
   rails-assets-dropzone!
+  rails-assets-lodash!
   rails_admin (~> 0.6.8)
   react-bootstrap-rails
   react-rails (~> 1.4.2)
