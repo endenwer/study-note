@@ -22,6 +22,7 @@ B = ReactBootstrap
     currentCategoryId: @props.currentCategoryId
     totalPages: @props.totalPages
     notes: @props.notes
+    editingNoteId: null
     q: @props.q
     page: 1
 
@@ -74,11 +75,12 @@ B = ReactBootstrap
       @getNotes()
       $(document).off('scroll', @onScroll)
 
-  onNoteEdit: (id, text, attachments, deletedAttachmentIds) ->
+  onNoteSave: (id, text, attachments, deletedAttachmentIds) ->
     url = "/notes/#{ id }"
     params = {}
     params.text = text
     params.attachment_ids = attachments.map?((attachment) -> attachment.id) || []
+    @state.editingNoteId = null
     @state.notes = @state.notes.map (note) ->
       if note.id == id
         note.text = text
@@ -91,8 +93,8 @@ B = ReactBootstrap
              data: { ids: deletedAttachmentIds })
     @setState(@state)
 
-  onAttachmentDelete: (id) ->
-    $.ajax("/attachments/#{id}", type: 'DELETE')
+  onNoteEdit: (id) ->
+    @setState(editingNoteId: id)
 
   render: ->
     <div className='container'>
@@ -109,6 +111,8 @@ B = ReactBootstrap
       <NoteList
         notes={@state.notes}
         onNoteEdit={@onNoteEdit}
+        editingNoteId={@state.editingNoteId}
+        onNoteSave={@onNoteSave}
         csrf_param={@props.csrf_param}
         csrf_token={@props.csrf_token}
       />
