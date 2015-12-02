@@ -2,13 +2,11 @@
   notes = props.notes.map (note) ->
     <Note
       key={note.id}
-      id={note.id}
-      text={note.text}
+      {...note}
       onEdit={() => props.onNoteEdit(note.id)}
       onCancelEditing={() => props.onNoteEdit(null)}
       onSave={props.onNoteSave}
       editing={props.editingNoteId == note.id}
-      attachments={note.attachments}
       csrf_param={props.csrf_param}
       csrf_token={props.csrf_token}
     />

@@ -61,6 +61,13 @@ B = ReactBootstrap
         <div>
           <div>{@props.text}</div>
           {attachments}
+          <p clasName='noteAuthor'>Создал: {@props.author.name}</p>
+          {
+            if @props.last_editor
+              <p className='noteEditor'>
+                Отредактировал: {@props.last_editor.name}
+              </p>
+          }
           <B.Button onClick={@props.onEdit}>Редактировать</B.Button>
         </div>
     <div className='note'>

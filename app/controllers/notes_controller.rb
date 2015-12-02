@@ -36,6 +36,7 @@ class NotesController < ApplicationController
 
   def update
     @note = Note.find(params[:id])
+    @note.last_editor = current_user
     if @note.update_attributes(note_params)
       render json: @note
     else
