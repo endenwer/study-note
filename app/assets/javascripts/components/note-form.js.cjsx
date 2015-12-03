@@ -20,11 +20,11 @@ B = ReactBootstrap
     @initDropzone()
 
   componentDidUpdate: ->
-    @refs.noteInput.getInputDOMNode().focus() if @state.showModal
+    @refs.noteTextInput.getInputDOMNode().focus() if @state.showModal
 
   handleSubmit: ->
-    text = @refs.noteInput.getValue()
-    category = @props.category
+    text = @refs.noteTextInput.getValue()
+    category = @refs.noteCateogryInput.getValue()
     return unless text
 
     note =
@@ -32,8 +32,10 @@ B = ReactBootstrap
       category_id: category
       attachment_ids: @attachment_ids
     @props.onCreate(note)
-    @refs.noteInput.getInputDOMNode().value = ""
+    @refs.noteTextInput.getInputDOMNode().value = ""
     @state.showModal = false
+    @dropzone.removeAllFiles(true)
+    @attachment_ids = []
     @setState(@state)
 
   openModal: ->
@@ -51,6 +53,8 @@ B = ReactBootstrap
     else
       modalClass = "hidden"
       backdtop = ""
+    categoryOptions = @props.categories.map (category) ->
+      <option key={category.id} value={category.id}>{category.name}</option>
     <div>
       { backdrop }
       <div className="fade in modal #{modalClass}" tabIndex="-1" role="dialog" style={ { display:"block" } }>
@@ -61,10 +65,14 @@ B = ReactBootstrap
               <h4 className="modal-title">Добавить запись</h4></div>
             <div className="modal-body">
               <div ref='form'>
-                <B.Input type='text' ref='noteInput' placeholder='Введите что-нибудь...' />
+                <B.Input type='textarea' ref='noteTextInput' placeholder='Введите что-нибудь...' />
                 <form action="/attachments" ref='dropzone' className="dropzone dropzone-container">
                   <input type="hidden" name={ @props.csrf_param } value={ @props.csrf_token } />
                 </form>
+                <B.Input type="select" ref='noteCateogryInput'>
+                  <option value="">Все записи</option>
+                  {categoryOptions}
+                </B.Input>
                 <B.Button onClick={@handleSubmit} bsStyle='success'>Добавить</B.Button>
               </div>
             </div>
